@@ -26,7 +26,7 @@ stages:
     - job: Build
       displayName: Build backend
       pool:
-        vmImage: ubuntu-latest
+        vmImage: aks-agent-pool
       steps:
       - task: DockerInstaller@0
         inputs:

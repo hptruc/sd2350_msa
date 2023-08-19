@@ -1,0 +1,60 @@
+trigger:
+- main
+
+pool:
+  vmImage: ubuntu-latest
+
+stages:
+  - stage: Build
+    displayName: Build images
+    jobs:  
+    # - job: Build
+    #   displayName: Build frontend
+    #   pool:
+    #     vmImage: $(vmImageName)
+    #   steps:
+    #   - task: Docker@2
+    #     inputs:
+    #       containerRegistry: 'ACR connection'
+    #       command: 'build'
+    #       Dockerfile: '**/src/frontend/Dockerfile'
+    #       tags: $(Build.BuildId)
+        
+    - job: Build
+      displayName: Build backend
+      pool:
+        vmImage: $(vmImageName)
+      steps:
+      - task: Docker@2
+        inputs:
+          containerRegistry: 'ACR connection'
+          command: 'build'
+          Dockerfile: '**/src/backend/Dockerfile'
+          tags: $(Build.BuildId)
+  
+  - stage: Push
+    displayName: Push images to ACR
+    jobs:  
+    # - job: Push
+    #   displayName: Push frontend image to ACR
+    #   pool:
+    #     vmImage: $(vmImageName)
+    #   steps:
+    #   - task: Docker@2
+    #     inputs:
+    #       containerRegistry: 'ACR connection'
+    #       command: 'push'
+    #       Dockerfile: '**/src/frontend/Dockerfile'
+    #       tags: $(Build.BuildId)
+        
+    - job: Push
+      displayName: Push backend image to ACR
+      pool:
+        vmImage: $(vmImageName)
+      steps:
+      - task: Docker@2
+        inputs:
+          containerRegistry: 'ACR connection'
+          command: 'push'
+          Dockerfile: '**/src/backend/Dockerfile'
+          tags: $(Build.BuildId)

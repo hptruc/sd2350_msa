@@ -26,16 +26,15 @@ stages:
     - job: Build
       displayName: Build backend
       pool:
-        name: aks-agent-pool
+        vmImage: ubuntu-latest
       steps:
-      - task: DockerInstaller@0
-        inputs:
-          dockerVersion: '17.09.0-ce'
-          
-      - task: Docker@2
-        inputs:
-          containerRegistry: 'ACR connection'
-          command: 'login'
+        - task: Docker@2
+          inputs:
+            containerRegistry: 'ACR connection 2'
+            repository: 'frontend'
+            command: 'build'
+            Dockerfile: '**/src/backend/Dockerfile'
+            tags: $(Build.BuildId)
   
   # - stage: Push
   #   displayName: Push images to ACR

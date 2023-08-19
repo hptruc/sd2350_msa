@@ -11,11 +11,11 @@ variables:
   backendDockerfile: '**/src/backend/Dockerfile'
   
 stages:
-  - stage: Build
-    displayName: Build images
+  - stage: Build & Push images to ACR
+    displayName: Build & Push images to ACR
     jobs:  
     - job: BuildFrontend
-      displayName: Build frontend
+      displayName: Build & Push frontend
       pool:
         vmImage: $(vmImage)
       steps:
@@ -23,12 +23,12 @@ stages:
         inputs:
           containerRegistry: $(containerRegistryConnectionName)
           repository: 'frontend'
-          command: 'build'
+          command: 'buildAndPush'
           Dockerfile: $(frontendDockerfile)
           tags: $(Build.BuildId)
 
     - job: BuildBackend
-      displayName: Build backend
+      displayName: Build & Push backend
       pool:
         vmImage: $(vmImage)
       steps:
@@ -36,35 +36,7 @@ stages:
           inputs:
             containerRegistry: $(containerRegistryConnectionName)
             repository: 'backend'
-            command: 'build'
+            command: 'buildAndPush'
             Dockerfile: $(backendDockerfile)
             tags: $(Build.BuildId)
   
-  - stage: Push
-    displayName: Push images to ACR
-    jobs:  
-    - job: PushFrontend
-      displayName: Push frontend image to ACR
-      pool:
-        vmImage: $(vmImage)
-      steps:
-      - task: Docker@2
-        inputs:
-          containerRegistry: $(containerRegistryConnectionName)
-          repository: 'frontend'
-          command: 'push'
-          Dockerfile: $(frontendDockerfile)
-          tags: $(Build.BuildId)
-        
-    - job: PushBackend
-      displayName: Push backend image to ACR
-      pool:
-        vmImage: $(vmImage)
-      steps:
-      - task: Docker@2
-        inputs:
-          containerRegistry: $(containerRegistryConnectionName)
-          repository: 'backend'
-          command: 'push'
-          Dockerfile: $(backendDockerfile)
-          tags: $(Build.BuildId)

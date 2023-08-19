@@ -36,6 +36,9 @@ stages:
         inputs:
           targetType: 'inline'
           script: |
+            Install-Module -Name AzureRM -RequiredVersion 6.13.1
+            Import-Module AzureRM
+            
             $acrUsername = "$(username)"
             $acrPassword = ConvertTo-SecureString -String "$(password)" -AsPlainText -Force
             $acrCred = New-Object System.Management.Automation.PSCredential($acrUsername, $acrPassword)

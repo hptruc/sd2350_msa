@@ -14,7 +14,7 @@ stages:
   - stage: Build
     displayName: Build images
     jobs:  
-    - job: Build
+    - job: BuildFrontend
       displayName: Build frontend
       pool:
         vmImage: $(vmImage)
@@ -27,7 +27,7 @@ stages:
           Dockerfile: $(frontendDockerfile)
           tags: $(Build.BuildId)
 
-    - job: Build
+    - job: BuildBackend
       displayName: Build backend
       pool:
         vmImage: $(vmImage)
@@ -43,7 +43,7 @@ stages:
   - stage: Push
     displayName: Push images to ACR
     jobs:  
-    - job: Push
+    - job: PushFrontend
       displayName: Push frontend image to ACR
       pool:
         vmImage: $(vmImage)
@@ -56,7 +56,7 @@ stages:
           Dockerfile: $(frontendDockerfile)
           tags: $(Build.BuildId)
         
-    - job: Push
+    - job: PushBackend
       displayName: Push backend image to ACR
       pool:
         vmImage: $(vmImage)

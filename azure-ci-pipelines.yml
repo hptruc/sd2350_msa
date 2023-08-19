@@ -35,9 +35,7 @@ stages:
       - task: Docker@2
         inputs:
           containerRegistry: 'ACR connection'
-          repository: 'backend'
-          command: 'build'
-          Dockerfile: '**/src/backend/Dockerfile'
+          command: 'login'
   
   # - stage: Push
   #   displayName: Push images to ACR

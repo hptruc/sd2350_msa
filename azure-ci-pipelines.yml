@@ -11,7 +11,7 @@ variables:
   backendDockerfile: '**/src/backend/Dockerfile'
   
 stages:
-  - stage: Build & Push images to ACR
+  - stage: BuildAndPush
     displayName: Build & Push images to ACR
     jobs:  
     - job: BuildFrontend

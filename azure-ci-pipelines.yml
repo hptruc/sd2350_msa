@@ -31,31 +31,13 @@ stages:
       - task: DockerInstaller@0
         inputs:
           dockerVersion: '17.09.0-ce'
-
-      - task: PowerShell@2
-        inputs:
-          targetType: 'inline'
-          script: |
-            Install-Module -Name AzureRM -RequiredVersion 6.13.1
-            Import-Module AzureRM
-            
-            $acrUsername = "$(username)"
-            $acrPassword = ConvertTo-SecureString -String "$(password)" -AsPlainText -Force
-            $acrCred = New-Object System.Management.Automation.PSCredential($acrUsername, $acrPassword)
-
-            Login-AzureRmContainerRegistry -Registry $(acrLoginServer) -Credential $acrCred
-            
-            docker build ./src/backend -t $(acrLoginServer)/myimage:$(Build.BuildId) .
-            docker push $(acrLoginServer)/myimage:$(Build.BuildId)
-
-            docker logout $(acrLoginServer)
           
-      # - task: Docker@2
-      #   inputs:
-      #     containerRegistry: 'ACR connection'
-      #     repository: 'backend'
-      #     command: 'build'
-      #     Dockerfile: '**/src/backend/Dockerfile'
+      - task: Docker@2
+        inputs:
+          containerRegistry: 'ACR connection'
+          repository: 'backend'
+          command: 'build'
+          Dockerfile: '**/src/backend/Dockerfile'
   
   # - stage: Push
   #   displayName: Push images to ACR
